@@ -3,21 +3,23 @@ import { AppLayout } from "../../components/AppLayout";
 import { useState } from "react";
 
 export default function NewPost(props) {
-  console.log("NEW POST PROPS: ", props);
+  // console.log("NEW POST PROPS: ", props);
   const [topic, setTopic] = useState();
   const [keywords, setKeywords] = useState();
   const [postContent, setPostContent] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await fetch(`/api/generatePost`,{
       method: 'POST',
-      header: {
-        'Content-Type': 'application/json'
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({topic, keywords}),
     });
     const json = await response.json();
-    console.log("Result : ", json.post.postContent);
+    console.log("Result : ", json.postContent);
     setPostContent(json.postContent);
   }
 
